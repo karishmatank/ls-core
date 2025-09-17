@@ -1,40 +1,50 @@
-print('Welcome to Calculator!')
+def prompt(message, return_output=True):
+    revised_message = f"==> {message}"
+    if return_output:
+        output = input(revised_message)
+        return output
+    print(revised_message)
+    return ""
+
+def get_valid_number(input_num):
+    message = f"Enter the {"first" if input_num == 1 else "second"} number: "
+    number_valid = False
+
+    while not number_valid:
+        number = prompt(message)
+        try:
+            number = float(number) if '.' in number else int(number)
+            number_valid = True
+        except ValueError:
+            continue
+
+    return number
+
+def get_valid_operation():
+    operation_valid = False
+    while not operation_valid:
+        op = prompt('What operation would you like to perform?\n'
+            '1) Add 2) Subtract 3) Multiply 4) Divide: ')
+        try:
+            op = int(op)
+        except ValueError:
+            continue
+
+        if 1 <= op <= 4:
+            operation_valid = True
+
+    return op
+
+prompt('Welcome to Calculator!', return_output=False)
 
 # Ask the user for the first number.
-number1_valid = False
-number2_valid = False
-
-while not number1_valid:
-    number1 = input("Enter the first number: ")
-    try:
-        number1 = float(number1) if '.' in number1 else int(number1)
-        number1_valid = True
-    except ValueError:
-        continue
-
+number1 = get_valid_number(1)
 
 # Ask the user for the second number.
-while not number2_valid:
-    number2 = input("Enter the second number: ")
-    try:
-        number2 = float(number2) if '.' in number2 else int(number2)
-        number2_valid = True
-    except ValueError:
-        continue
+number2 = get_valid_number(2)
 
 # Ask the user for an operation to perform.
-operation_valid = False
-while not operation_valid:
-    print('What operation would you like to perform?\n'
-        '1) Add 2) Subtract 3) Multiply 4) Divide')
-    operation = input()
-    try:
-        operation = int(operation)
-    except ValueError:
-        continue
-
-    if operation >= 1 and operation <= 4:
-        operation_valid = True
+operation = get_valid_operation()
 
 # Perform the operation on the two numbers.
 match operation:
@@ -52,4 +62,4 @@ match operation:
         result = number1 / number2
 
 # Print the result to the terminal.
-print(f"The result is: {result}")
+prompt(f"The result is: {result}", return_output=False)
