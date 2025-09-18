@@ -1,8 +1,19 @@
 {
-    "first_num": "Enter the first number: ",
-    "new_calc": "Would you like to perform a new calculation? Y/N only: ",
-    "operation": "What operation would you like to perform? 1) Add 2) Subtract 3) Multiply 4) Divide: ",
-    "result": "The result is: ",
-    "second_num": "Enter the second number: ",
-    "welcome": "Welcome to Calculator!"
+    "lang": "What's your language? \n(Please choose 'en' for English or 'yoda' for Yoda speak): ",
+    "welcome": "Welcome to Calculator!",
+    "en": {
+        "first_num": "Enter the first number: ",
+        "new_calc": "Would you like to perform a new calculation? Y/N only: ",
+        "operation": "What operation would you like to perform? 1) Add 2) Subtract 3) Multiply 4) Divide: ",
+        "result": "The result is: ",
+        "second_num": "Enter the second number: "
+    },
+    "yoda": {
+        "first_num": "Enter the first number. Hmm.: ",
+        "new_calc": "To perform a new calculation would you like? Y/N only: ",
+        "operation": "To perform what operation would you like? 1) Add 2) Subtract 3) Multiply 4) Divide: ",
+        "result": "The result be: ",
+        "second_num": "Enter the second number. Hrmmm.: "
+    }
+    
 }

@@ -1,6 +1,13 @@
 import json
 
+def message_translate(key, lang='en'):
+    # Translate message to selected language
+    if lang not in ['en', 'yoda']:
+        lang = 'en'
+    return CALCULATOR_MESSAGES[lang][key]
+
 def prompt(message, return_output=True):
+    # Return message with arrow formatting
     revised_message = f"==> {message}"
     if return_output:
         output = input(revised_message)
@@ -9,10 +16,12 @@ def prompt(message, return_output=True):
     return ""
 
 def get_valid_number(input_num):
+    # Make sure user input is valid int or float
     if input_num == 1:
-        message = calculator_messages['first_num']
+        message = message_translate('first_num', LANG)
     else:
-        message = calculator_messages['second_num']
+        message = message_translate('second_num', LANG)
+
     number_valid = False
 
     while not number_valid:
@@ -26,9 +35,10 @@ def get_valid_number(input_num):
     return number
 
 def get_valid_operation():
+    # Make sure operation is 1, 2, 3, or 4
     operation_valid = False
     while not operation_valid:
-        op = prompt(calculator_messages['operation'])
+        op = prompt(message_translate('operation', LANG))
         try:
             op = int(op)
         except ValueError:
@@ -65,16 +75,20 @@ def calculation():
             result = number1 / number2
 
     # Print the result to the terminal.
-    prompt(f"{calculator_messages['result']} {result}", return_output=False)
+    prompt(
+        f"{message_translate('result', LANG)} {result}",
+        return_output=False
+    )
 
 
 # Read the JSON file with our messages
 with open('calculator_messages.json', 'r') as file:
-    calculator_messages = json.load(file)
+    CALCULATOR_MESSAGES = json.load(file)
 
-prompt(calculator_messages['welcome'], return_output=False)
+prompt(CALCULATOR_MESSAGES['welcome'], return_output=False)
+LANG = prompt(CALCULATOR_MESSAGES['lang'])
 KEEP_CALCULATING = True
 while KEEP_CALCULATING:
     calculation()
-    again = prompt(calculator_messages['new_calc'])
+    again = prompt(message_translate('new_calc', LANG))
     KEEP_CALCULATING = again.upper() == 'Y'
