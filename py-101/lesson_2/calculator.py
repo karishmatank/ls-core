@@ -35,31 +35,38 @@ def get_valid_operation():
 
     return op
 
+def calculation():
+    # Ask the user for the first number.
+    number1 = get_valid_number(1)
+
+    # Ask the user for the second number.
+    number2 = get_valid_number(2)
+
+    # Ask the user for an operation to perform.
+    operation = get_valid_operation()
+
+    # Perform the operation on the two numbers.
+    match operation:
+        case 1:
+            # Addition
+            result = number1 + number2
+        case 2:
+            # Subtraction
+            result = number1 - number2
+        case 3:
+            # Multiplication
+            result = number1 * number2
+        case 4:
+            # Division
+            result = number1 / number2
+
+    # Print the result to the terminal.
+    prompt(f"The result is: {result}", return_output=False)
+
+
 prompt('Welcome to Calculator!', return_output=False)
-
-# Ask the user for the first number.
-number1 = get_valid_number(1)
-
-# Ask the user for the second number.
-number2 = get_valid_number(2)
-
-# Ask the user for an operation to perform.
-operation = get_valid_operation()
-
-# Perform the operation on the two numbers.
-match operation:
-    case 1:
-        # Addition
-        result = number1 + number2
-    case 2:
-        # Subtraction
-        result = number1 - number2
-    case 3:
-        # Multiplication
-        result = number1 * number2
-    case 4:
-        # Division
-        result = number1 / number2
-
-# Print the result to the terminal.
-prompt(f"The result is: {result}", return_output=False)
+keep_calculating = True
+while keep_calculating:
+    calculation()
+    again = prompt("Would you like to perform a new calculation? Y/N only: ")
+    keep_calculating = again.upper() == 'Y'
