@@ -30,6 +30,7 @@ def get_valid_number(input_num):
             number = float(number) if '.' in number else int(number)
             number_valid = True
         except ValueError:
+            prompt(message_translate('error_num', LANG), return_output=False)
             continue
 
     return number
@@ -42,6 +43,10 @@ def get_valid_operation():
         try:
             op = int(op)
         except ValueError:
+            prompt(
+                message_translate('error_operation', LANG), 
+                return_output=False
+            )
             continue
 
         if 1 <= op <= 4:
@@ -72,13 +77,22 @@ def calculation():
             result = number1 * number2
         case 4:
             # Division
-            result = number1 / number2
+            try:
+                result = number1 / number2
+            except ZeroDivisionError:
+                prompt(
+                    message_translate("zero_div", LANG), 
+                    return_output=False
+                )
+                return
 
     # Print the result to the terminal.
     prompt(
         f"{message_translate('result', LANG)} {result}",
         return_output=False
     )
+
+    return
 
 
 # Read the JSON file with our messages
