@@ -1,3 +1,5 @@
+import json
+
 def prompt(message, return_output=True):
     revised_message = f"==> {message}"
     if return_output:
@@ -7,7 +9,10 @@ def prompt(message, return_output=True):
     return ""
 
 def get_valid_number(input_num):
-    message = f"Enter the {"first" if input_num == 1 else "second"} number: "
+    if input_num == 1:
+        message = calculator_messages['first_num']
+    else:
+        message = calculator_messages['second_num']
     number_valid = False
 
     while not number_valid:
@@ -23,8 +28,7 @@ def get_valid_number(input_num):
 def get_valid_operation():
     operation_valid = False
     while not operation_valid:
-        op = prompt('What operation would you like to perform?\n'
-            '1) Add 2) Subtract 3) Multiply 4) Divide: ')
+        op = prompt(calculator_messages['operation'])
         try:
             op = int(op)
         except ValueError:
@@ -61,12 +65,16 @@ def calculation():
             result = number1 / number2
 
     # Print the result to the terminal.
-    prompt(f"The result is: {result}", return_output=False)
+    prompt(f"{calculator_messages['result']} {result}", return_output=False)
 
 
-prompt('Welcome to Calculator!', return_output=False)
-keep_calculating = True
-while keep_calculating:
+# Read the JSON file with our messages
+with open('calculator_messages.json', 'r') as file:
+    calculator_messages = json.load(file)
+
+prompt(calculator_messages['welcome'], return_output=False)
+KEEP_CALCULATING = True
+while KEEP_CALCULATING:
     calculation()
-    again = prompt("Would you like to perform a new calculation? Y/N only: ")
-    keep_calculating = again.upper() == 'Y'
+    again = prompt(calculator_messages['new_calc'])
+    KEEP_CALCULATING = again.upper() == 'Y'

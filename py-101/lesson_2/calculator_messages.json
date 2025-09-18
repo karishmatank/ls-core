@@ -1,0 +1,8 @@
+{
+    "first_num": "Enter the first number: ",
+    "new_calc": "Would you like to perform a new calculation? Y/N only: ",
+    "operation": "What operation would you like to perform? 1) Add 2) Subtract 3) Multiply 4) Divide: ",
+    "result": "The result is: ",
+    "second_num": "Enter the second number: ",
+    "welcome": "Welcome to Calculator!"
+}
