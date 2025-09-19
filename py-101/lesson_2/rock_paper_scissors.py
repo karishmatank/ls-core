@@ -1,11 +1,13 @@
 import random
 
-VALID_CHOICES = ['rock', 'paper', 'scissors']
+VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 USER_WIN_SCENARIOS = {
     # User wins with following user choice: computer choice scenarios
-    "rock": "scissors",
-    "paper": "rock",
-    "scissors": "paper"
+    "rock": ["scissors", "lizard"],
+    "paper": ["rock", "spock"],
+    "scissors": ["paper", "lizard"],
+    "lizard": ["paper", "spock"],
+    "spock": ["rock", "scissors"]
 }
 
 def prompt(message):
@@ -25,7 +27,7 @@ def get_computer_choice():
 def determine_winner(user, computer):
     if user == computer:
         return None
-    elif computer == USER_WIN_SCENARIOS[user]:
+    elif computer in USER_WIN_SCENARIOS[user]:
         return "user"
     else:
         return "computer"
