@@ -1,6 +1,7 @@
 import random
 
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+ABBREVIATIONS = [i[0] if i[0] != 's' else i[:2] for i in VALID_CHOICES]
 USER_WIN_SCENARIOS = {
     # User wins with following user choice: computer choice scenarios
     "rock": ["scissors", "lizard"],
@@ -18,6 +19,13 @@ def get_user_choice():
         choice = input()
         if choice.lower() in VALID_CHOICES:
             break
+
+        # Check if user used an abbreviation
+        if choice.lower() in ABBREVIATIONS:
+            # Transform user choice into full string
+            choice = VALID_CHOICES[ABBREVIATIONS.index(choice.lower())]
+            break
+
         prompt("Hmm, that's not a valid choice, please choose again!")
     return choice
 
@@ -41,7 +49,8 @@ def print_winner(winner):
         prompt("It's a tie.")
 
 def play_game():
-    prompt(f"Choose one- {', '.join(VALID_CHOICES)}: ")
+    prompt(f"Choose one- {', '.join(VALID_CHOICES)}\n" +
+           f"    You may also abbreviate to {', '.join(ABBREVIATIONS)}: ")
     user_choice = get_user_choice()
     computer_choice = get_computer_choice()
     prompt(f"You chose {user_choice}, computer chose {computer_choice}")
