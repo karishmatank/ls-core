@@ -107,8 +107,8 @@ def is_dot_separated_ip_address(input_string):
     return True
 
 ## Q5: What will happen in the code below?
-if False:
-    greeting = "hello world"
+# if False:
+#     greeting = "hello world"
 
 # print(greeting)
 # This will print a NameError because the if statement will never run given if False is always False
