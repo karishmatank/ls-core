@@ -18,7 +18,7 @@ Data structures:
         - String / list: Transform each word
 
 High-level strategies:
-    - Split string into words. For every third word (indices 2, 5, 7, ...), capitalize every second letter (odd indices). Combine back into one string and return.
+    - Split string into words. For every third word (indices 2, 5, 8, ...), capitalize every second letter (odd indices). Combine back into one string and return.
 
 A:
     - Create empty list "transformed"
@@ -29,7 +29,8 @@ A:
         - If word_count is a multiple of 3:
             - Get string- *capitalize_every_second* input word
             - Add string to end of "transformed"
-        - Add word to end of "transformed"
+        - Else
+            - Add word to end of "transformed"
     - Combine words in "transformed" into 1 str
     - Return the combined str
 
