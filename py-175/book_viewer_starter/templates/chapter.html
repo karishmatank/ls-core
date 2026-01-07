@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="content-subhead">{{ ch_title }}</h2>
+{{ ch_contents | in_paragraphs }}
+{% endblock %}
