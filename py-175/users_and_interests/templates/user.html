@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Hi, my name is {{ name }}!</h1>
+  <h2>Email:</h2>
+  <p>{{ details['email'] }}</p>
+
+  {% if details['interests'] %}
+    <h2>Interests:</h2>
+    <p>{{ details['interests'] | format_commas }}</p>
+  {% endif %}
+  <hr>
+  <div>
+    <h4 class="user-links-header">View other users:</h4>
+  </div>
+{% endblock %}
