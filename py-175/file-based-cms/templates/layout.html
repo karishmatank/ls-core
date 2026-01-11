@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>CMS</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/app.css') }}">
+  </head>
+  <body>
+    <header>
+      {% with flash_messages = get_flashed_messages(with_categories=True) %}
+        {% if flash_messages %}
+          {% for category, msg in flash_messages %}
+            <p class="message">
+              {{ msg }}
+            </p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </header>
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+  </body>
+</html>
