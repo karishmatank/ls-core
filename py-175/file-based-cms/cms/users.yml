@@ -1,3 +1,4 @@
-admin: '$2b$12$ugokt6qiEsW28czTnPB6j.3x9/cZrZLsyTUW5qyxykp0JoW3uzIDu'
-developer: '$2b$12$kbpIf1170PmrQrW/QxhopucIFqNd1pHlIlL6p917sekITFR7dRz/W'
-realuser: '$2b$12$9gkvnCIxjv5bdyU3znIhrOHatnTpdeCSPwBbdDUpGWGgsCDzSclMK'
+admin: $2b$12$ugokt6qiEsW28czTnPB6j.3x9/cZrZLsyTUW5qyxykp0JoW3uzIDu
+developer: $2b$12$kbpIf1170PmrQrW/QxhopucIFqNd1pHlIlL6p917sekITFR7dRz/W
+new_user: $2b$12$yyKoxMQGubPD0IMPqBy.QOJ8nEy0YbcZlWPIgd8Mi63VTDNL9CTwi
+realuser: $2b$12$9gkvnCIxjv5bdyU3znIhrOHatnTpdeCSPwBbdDUpGWGgsCDzSclMK
