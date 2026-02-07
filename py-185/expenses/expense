@@ -1,0 +1,241 @@
+#!/usr/bin/env python
+
+import psycopg2
+from psycopg2 import extras
+import sys
+from textwrap import dedent
+from datetime import date
+from contextlib import contextmanager
+
+
+class ExpenseData:
+    def __init__(self):
+        self._setup_schema()
+
+    @contextmanager
+    def _database_connection(self):
+        connection = psycopg2.connect(dbname='expenses')
+
+        try:
+            with connection:
+                yield connection
+        finally:
+            connection.close()
+
+    def _display_expenses(self, data):
+        for expense in data:
+            print(f"{str(expense['id']).rjust(3)} | ",
+                f"{str(expense['created_on'])} | ",
+                f"{str(expense['amount']).rjust(12)} | ",
+                f"{expense['memo']}")
+            
+    def _display_count(self, row_count):
+        if row_count == 0:
+            print("There are no expenses.")
+            return
+        
+        print(f"There {'are' if row_count > 1 else 'is'} {row_count} expense{'s' if row_count > 1 else ''}.")
+
+    def _display_total(self, data):
+        total_amount = sum(e['amount'] for e in data)
+        print("-" * 50)
+        print(f"Total {str(round(total_amount, 2)).rjust(27)}")
+
+    def _setup_schema(self):
+        with self._database_connection() as connection:
+            with connection.cursor(cursor_factory=extras.DictCursor) as cursor:
+                cursor.execute(
+                    """
+                        SELECT count(*) FROM information_schema.tables
+                        WHERE table_schema = 'public' AND table_name = 'expenses';
+                    """
+                )
+                table_exists = cursor.fetchone()['count']
+
+                if not table_exists:
+                    cursor.execute(
+                        """
+                            CREATE TABLE expenses (
+                                id serial PRIMARY KEY,
+                                amount numeric(6,2) NOT NULL CHECK (amount >= 0.01),
+                                memo text NOT NULL,
+                                created_on date NOT NULL DEFAULT NOW()
+                            );
+                        """
+                    )
+
+
+    def add_expense(self, amount, memo, created_on=None):
+        # Check types to make sure they match
+        try:
+            amount = float(amount)
+        except ValueError:
+            print("Amount must be numeric.")
+            return
+        
+        # Get today's date if no date provided
+        # Else, validate the date provided
+        if not created_on:
+            created_on = date.today()
+        else:
+            try:
+                created_on = date.fromisoformat(created_on)
+            except ValueError:
+                print("Date must be in YYYY-MM-DD format, e.g. 2024-02-01.")
+                return
+        
+        with self._database_connection() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                        INSERT INTO expenses (amount, memo, created_on) VALUES
+                        (%s, %s, %s) 
+                    """, 
+                    (amount, memo, created_on)
+                )
+
+    def list_expenses(self):
+        with self._database_connection() as connection:
+            with connection.cursor(cursor_factory=extras.DictCursor) as cursor:
+                cursor.execute("""
+                    SELECT *
+                    FROM expenses
+                    ORDER BY created_on;
+                """)
+                expenses = cursor.fetchall()
+
+        # Print results
+        self._display_count(len(expenses))
+        self._display_expenses(expenses)
+        if len(expenses) > 1:
+            self._display_total(expenses)
+            
+    def search_expenses(self, query):
+        # Add % in query string
+        query = f"%{query}%"
+
+        with self._database_connection() as connection:
+            with connection.cursor(cursor_factory=extras.DictCursor) as cursor:
+                cursor.execute(
+                    """
+                        SELECT *
+                        FROM expenses
+                        WHERE memo ILIKE %s;         
+                    """,
+                    (query, )
+                )
+                matches = cursor.fetchall()
+        
+        self._display_count(len(matches))
+        self._display_expenses(matches)
+        if len(matches) > 1:
+            self._display_total(matches)
+
+    def delete_expense(self, expense_id):
+        # Check to make sure id is an integer
+        try:
+            expense_id = int(expense_id)
+        except ValueError:
+            print("Provided id is not an integer.")
+            return
+
+        with self._database_connection() as connection:
+            with connection.cursor(cursor_factory=extras.DictCursor) as cursor:
+                # See if record exists
+                cursor.execute(
+                    """
+                        SELECT *
+                        FROM expenses
+                        WHERE id = %s;
+                    """,
+                    (expense_id, )
+                )
+
+                matches = cursor.fetchall()
+                if not matches:
+                    print(f"There is no expense with id '{expense_id}'.")
+                    return
+
+                cursor.execute(
+                    """
+                        DELETE FROM expenses
+                        WHERE id = %s;
+                    """,
+                    (expense_id, )
+                )
+
+                print("The following expense has been deleted:")
+                self._display_expenses(matches)
+    
+    def delete_all_expenses(self):
+        with self._database_connection() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    DELETE FROM expenses;
+                """)
+                print("All expenses have been deleted.")
+
+
+class CLI:
+    def __init__(self):
+        self.expense_data = ExpenseData()
+
+    def intro_message(self):
+        message = dedent("""
+            An expense recording system
+
+            Commands:
+
+            add AMOUNT MEMO [DATE] - record a new expense
+            clear - delete all expenses
+            list - list all expenses
+            delete NUMBER - remove expense with id NUMBER
+            search QUERY - list expenses with a matching memo field
+        """)
+        print(message)
+
+    def run(self, cli_arguments):
+        command = cli_arguments[0] if cli_arguments else None
+
+        if command == 'list':
+            self.expense_data.list_expenses()
+        elif command == 'add':
+            if len(cli_arguments) < 3:
+                print("You must provide an amount and memo.")
+            elif len(cli_arguments) > 4:
+                print("Too many arguments provided. Perhaps you didn't wrap a multi-word memo around quotes?")
+            else:
+                args = cli_arguments[1:]
+                self.expense_data.add_expense(*args)
+        elif command == 'search':
+            if len(cli_arguments) < 2:
+                print("You must provide a search query.")
+            elif len(cli_arguments) > 2:
+                print("Too many arguments provided. Perhaps you didn't wrap a multi-word query around quotes?")
+            else:
+                query = cli_arguments[1]
+                self.expense_data.search_expenses(query)
+        elif command == 'delete':
+            if len(cli_arguments) < 2:
+                print("You must provide an expense id.")
+            elif len(cli_arguments) > 2:
+                print("Too many arguments provided. Please provide one id.")
+            else:
+                expense_id = cli_arguments[1]
+                self.expense_data.delete_expense(expense_id)
+        elif command == 'clear':
+            if len(cli_arguments) > 1:
+                print("Too many arguments provided for this action.")
+            else:
+                answer = input("This will remove all expenses. Are you sure? (enter y to confirm): ")
+                if answer.lower().strip() != 'y':
+                    return
+                self.expense_data.delete_all_expenses()
+
+        else:
+            self.intro_message()
+
+
+if __name__ == "__main__":
+    cli = CLI()
+    cli.run(sys.argv[1:])
