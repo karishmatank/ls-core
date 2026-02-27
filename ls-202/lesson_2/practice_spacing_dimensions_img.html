@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spacing and Dimensions Practice</title>
+    <meta charset="utf-8">
+    <style>
+      /* Q1 */
+      /* My solution
+      div {
+        width: 800px;
+        margin: 0 auto;
+      }
+
+      img {
+        width: 100%;
+      }
+      */
+      /* Q1 LS answer just did everything in the img tag but set its display property to block
+      We need that because img tags are inline by default. We can then rely on margins to work
+
+      LS solution:
+      img {
+        display: block;
+        width: 800px;
+        margin: 0 auto;
+      }
+      */
+      /* Q2 - Q4 */
+      img {
+        display: block;
+        margin: 0 auto;
+        max-width: 800px;
+        min-width: 500px;
+        width: 100%;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div>
+      <img 
+        src="https://d3jtzah944tvom.cloudfront.net/lesson_2/exercises_dimension_and_spacing/H%C3%B4tel_des_Invalides_-_20150801_16h09_%2810630%29.jpg"
+        alt="Demonstration of image sizing"
+      >
+    </div>
+  </body>
+</html>
