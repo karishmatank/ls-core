@@ -4,6 +4,7 @@
 # Any random files
 *random*.py
 *spot*.py
+*spot*.md
 *additional*practice*.py
 
 # Python bytecode / cache
