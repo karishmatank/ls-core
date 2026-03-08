@@ -1,6 +1,6 @@
 // Q1: Concatenate two or more strings, one with a first name, another one with a last name
-let full_name = 'John' + ' ' + 'Doe';
-console.log(full_name);
+let fullName = 'John' + ' ' + 'Doe';
+console.log(fullName);
 
 // Q2: Get the individual digits of a number 4936 using arithmetic operators
 let num = 4936;
