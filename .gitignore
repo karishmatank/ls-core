@@ -1,11 +1,15 @@
 # Study session notes
 *study_session*.py
+*study_session*.js
 
 # Any random files
 *random*.py
+*random*.js
 *spot*.py
+*spot*.js
 *spot*.md
 *additional*practice*.py
+*additional*practice*.js
 
 # Python bytecode / cache
 __pycache__/
