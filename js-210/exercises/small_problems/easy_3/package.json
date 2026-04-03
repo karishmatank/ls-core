@@ -1,0 +1,16 @@
+{
+  "name": "easy_3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "how_old_is_teddy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
