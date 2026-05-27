@@ -24,20 +24,20 @@ class Card:
     @property
     def rank(self):
         return self._rank
-    
+
     @property
     def suit(self):
         return self._suit
-    
+
     def __repr__(self):
         return f"{self.rank} of {self.suit}"
-    
+
     def value(self):
         if isinstance(self.rank, int):
             return self.rank
-        
+
         return Card.FACE_CARD_VALUES[self.rank]
-        
+
 
 class Deck:
     SUITS = ['Spades', 'Hearts', 'Clubs', 'Diamonds']
@@ -49,9 +49,9 @@ class Deck:
         # Some data structure, like a list or dictionary,
         #   might be required.
         self.reset()
-        
+
     def reset(self):
-        self.cards = [Card(rank, suit) for rank in Deck.RANKS 
+        self.cards = [Card(rank, suit) for rank in Deck.RANKS
                                        for suit in Deck.SUITS]
         random.shuffle(self.cards)
 
@@ -79,7 +79,7 @@ class Participant:
     @property
     def hand(self):
         return self._hand
-    
+
     @property
     def hand_value(self):
         return self._hand_value
@@ -91,7 +91,7 @@ class Participant:
 
     def is_busted(self):
         return self.hand_value > Participant.MAX_HAND_VALUE
-    
+
     def update_hand_value(self):
         num_aces = 0
         total_value = 0
@@ -103,9 +103,9 @@ class Participant:
         for _ in range(0, num_aces):
             if total_value > Participant.MAX_HAND_VALUE:
                 total_value -= (Card.MAX_ACE_VALUE - Card.MIN_ACE_VALUE)
-        
+
         self._hand_value = total_value
-    
+
     def reset_hand(self):
         self._hand = []
         self._hand_value = 0
@@ -126,7 +126,7 @@ class Player(Participant):
 
     def display_hand_value(self):
         print(f"Player's hand value is {self.hand_value}")
-        
+
 
 class Dealer(Participant):
     HIT_THRESHOLD = 17
@@ -153,7 +153,7 @@ class Dealer(Participant):
 
     def display_hand_value(self):
         print(f"Dealer's hand value is {self.hand_value}")
-    
+
     def reset_hand(self):
         super().reset_hand()
         self.hide_cards = True
@@ -200,7 +200,7 @@ class TwentyOneGame:
 
     def _display_rich_message(self):
         print("You are rich!")
-    
+
     def _is_continuing(self):
         while True:
             play_again = input("Play again? (y/n): ").lower().strip()
@@ -239,7 +239,7 @@ class TwentyOneGame:
         """Deal two cards to each participant"""
         self.player.hit(self.deck.deal(2))
         self.dealer.hit(self.deck.deal(2))
-        
+
     def show_cards(self):
         self.player.show_cards()
         self.dealer.show_cards()
@@ -266,7 +266,7 @@ class TwentyOneGame:
             if choice in ['hit', 'stay']:
                 break
             print("Hmm, that's not a valid option, try again!")
-        
+
         return choice
 
     def dealer_turn(self):
@@ -279,7 +279,7 @@ class TwentyOneGame:
     @staticmethod
     def _display_welcome_message():
         print("Welcome to Twenty-One!")
-    
+
     @staticmethod
     def _display_goodbye_message():
         print("Thanks for playing Twenty-One!")
@@ -287,10 +287,10 @@ class TwentyOneGame:
     def _determine_winner(self):
         if self.player.is_busted():
             return self.dealer
-        
+
         if self.dealer.is_busted():
             return self.player
-        
+
         # Then check for value comparisions
         if self.dealer.hand_value > self.player.hand_value:
             return self.dealer
@@ -298,12 +298,12 @@ class TwentyOneGame:
             return self.player
         else:
             return None
-    
+
     def _display_busted_result(self):
         if self.player.is_busted():
             print("You busted :/ Dealer wins!")
         elif self.dealer.is_busted():
-            print("Dealer busted, you win!") 
+            print("Dealer busted, you win!")
 
     def display_result(self, winner):
         # Display hands for a final time
@@ -321,7 +321,7 @@ class TwentyOneGame:
             self.player.balance += 1
         else:
             self.player.balance -= 1
-    
+
 
 
 

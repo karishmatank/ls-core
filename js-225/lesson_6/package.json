@@ -1,0 +1,17 @@
+{
+  "name": "lesson_6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tic_tac_toe.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "readline-sync": "^1.4.10",
+    "shuffle-array": "^1.0.1"
+  }
+}
